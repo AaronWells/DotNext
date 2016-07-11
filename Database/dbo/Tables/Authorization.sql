@@ -6,3 +6,7 @@
     CONSTRAINT [PK_Authorization] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 
+
+
+
+

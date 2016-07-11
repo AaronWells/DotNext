@@ -1127,3 +1127,12 @@ insert into [Authorization] select uid,
 	'/' + cast (((id - 1) / 10 ) % 10 + 1 as nvarchar) + 
 	'/' + cast((id - 1) % 10  + 1 as nvarchar) + '/'  node
 from People
+
+insert into Users (identifier) values ('AliceSmith@email.com');
+insert into Users (identifier) values ('BobSmith@email.com');
+
+insert into UserAuthorization (user_id, authorization_id, permissions) values (1,2,0x01);
+insert into UserAuthorization (user_id, authorization_id, permissions) values (1,3,0x01);
+insert into UserAuthorization (user_id, authorization_id, permissions) values (2,3,0x01);
+insert into UserAuthorization (user_id, authorization_id, permissions) values (2,4,0x01);
+
