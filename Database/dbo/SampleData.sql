@@ -998,6 +998,7 @@ insert into People (first_name, last_name, email, gender, ssn, race, address, ci
 insert into People (first_name, last_name, email, gender, ssn, race, address, city, state, country, birthdate) values ('Billy', 'Martin', 'bmartinrp@goo.ne.jp', 'M', '963-05-5920', 'Laotian', '97 Donald Center', 'Syracuse', 'New York', 'US', '5/31/2002');
 insert into People (first_name, last_name, email, gender, ssn, race, address, city, state, country, birthdate) values ('Jane', 'Hughes', 'jhughesrq@amazon.de', 'F', '988-11-5253', 'Pueblo', '0 Quincy Alley', 'Boston', 'Massachusetts', 'US', '3/12/2001');
 insert into People (first_name, last_name, email, gender, ssn, race, address, city, state, country, birthdate) values ('Sarah', 'Bailey', 'sbaileyrr@privacy.gov.au', 'F', '626-95-3394', 'Puget Sound Salish', '4953 Stephen Road', 'Jackson', 'Mississippi', 'US', '9/24/1997');
+GO
 
 insert into Districts (name) values ('Kinsman');
 insert into Districts (name) values ('Thompson');
@@ -1009,6 +1010,7 @@ insert into Districts (name) values ('Onsgard');
 insert into Districts (name) values ('Erie');
 insert into Districts (name) values ('Jenifer');
 insert into Districts (name) values ('Clove');
+GO
 
 insert into Schools (name) values ('Myrtle');
 insert into Schools (name) values ('Meadow Valley');
@@ -1110,29 +1112,43 @@ insert into Schools (name) values ('Pleasure');
 insert into Schools (name) values ('Independence');
 insert into Schools (name) values ('Beilfuss');
 insert into Schools (name) values ('Corry');
+GO
+
+EXEC sp_set_session_context @key=N'UserId', @value='Admin@email.com';  
+
+
+insert into Users (identifier) values ('Admin@email.com');
+insert into Users (identifier) values ('AliceSmith@email.com');
+insert into Users (identifier) values ('BobSmith@email.com');
+GO
 
 insert into [Authorization] (uid, node) values (0x, cast('/' as hierarchyid));
+GO
+
+insert into UserAuthorization (user_id, authorization_id, permissions) values (1,1,0x01);
 
 insert into [Authorization] select uid,	
 	'/' + cast (id as nvarchar) + '/' node 
 from Districts
+GO
 
 insert into [Authorization] select uid,
 	'/' + cast ((id - 1) / 10  + 1 as nvarchar) + 
 	'/' + cast((id - 1) % 10  + 1 as nvarchar) + '/'  node
 from Schools
+GO
 
 insert into [Authorization] select uid,
 	'/' + cast ((id - 1) / 100  + 1 as nvarchar) + 
 	'/' + cast (((id - 1) / 10 ) % 10 + 1 as nvarchar) + 
 	'/' + cast((id - 1) % 10  + 1 as nvarchar) + '/'  node
 from People
+GO
 
-insert into Users (identifier) values ('AliceSmith@email.com');
-insert into Users (identifier) values ('BobSmith@email.com');
-
-insert into UserAuthorization (user_id, authorization_id, permissions) values (1,2,0x01);
-insert into UserAuthorization (user_id, authorization_id, permissions) values (1,3,0x01);
+insert into UserAuthorization (user_id, authorization_id, permissions) values (2,2,0x01);
 insert into UserAuthorization (user_id, authorization_id, permissions) values (2,3,0x01);
-insert into UserAuthorization (user_id, authorization_id, permissions) values (2,4,0x01);
+insert into UserAuthorization (user_id, authorization_id, permissions) values (3,3,0x01);
+insert into UserAuthorization (user_id, authorization_id, permissions) values (3,4,0x01);
+GO
 
+ALTER SECURITY POLICY [Security].[AuthorizationHierarchy] WITH ( STATE = ON );
