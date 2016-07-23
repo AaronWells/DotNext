@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 
 namespace Api.Models
 {
@@ -13,6 +14,7 @@ namespace Api.Models
 
         public DotNextContext(DbContextOptions<DotNextContext> options) : base(options)
         {
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
