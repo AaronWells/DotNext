@@ -28,7 +28,7 @@ namespace Api.Models
         {
             _sqlConnection.Open();
             var cmd = _sqlConnection.CreateCommand();
-            cmd.CommandText = $@"EXEC sp_set_session_context @key=N'UserId', @value='Admin@email.com';";
+            cmd.CommandText = $@"EXEC sp_set_session_context @key=N'UserId', @value='AliceSmith@email.com';";
             cmd.ExecuteNonQuery();
         }
 
