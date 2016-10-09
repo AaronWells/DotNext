@@ -1,18 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+using System.Linq;
 
 namespace Api.Models
 {
     public partial class DotNextContext : DbContext
     {
+        private IHostingEnvironment _environment;
+        private IHttpContextAccessor _httpContextAccessor;
+
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
         //    optionsBuilder.UseSqlServer(@"Data Source=(local);Initial Catalog=DotNext;Integrated Security=True");
         //}
 
-        public DotNextContext(DbContextOptions<DotNextContext> options) : base(options)
+        public DotNextContext(IHostingEnvironment environnment, IHttpContextAccessor httpContextAccessor) : base()
         {
-            
+            _environment = environnment;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseSqlServer(new SecureDbConnection());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

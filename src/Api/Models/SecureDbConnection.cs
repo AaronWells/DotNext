@@ -6,11 +6,12 @@ namespace Api.Models
 {
     public class SecureDbConnection : DbConnection
     {
+        private const string ConnectionStringName = @"Data Source=(local);Initial Catalog=DotNext;Integrated Security=True";
         private readonly SqlConnection _sqlConnection;
 
         public SecureDbConnection()
         {
-            _sqlConnection = new SqlConnection();
+            _sqlConnection = new SqlConnection(ConnectionStringName);
         }
         
         protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using Api.Models;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.AspNetCore.Http;
 
 namespace Api
 {
@@ -16,9 +17,9 @@ namespace Api
                 .AddJsonFormatters()
                 .AddAuthorization();
             
-            services.AddSingleton<DotNextContextFactory>();
+            services.AddDbContext<DotNextContext>();
 
-            services.AddDbContext<DotNextContext>(options => options.UseSqlServer(ConnectionString));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         public void Configure(IApplicationBuilder app)
