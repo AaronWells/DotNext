@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Api.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize, Route("api/[controller]")]
     public class PeopleController
     {
         private readonly DotNextContext _context;

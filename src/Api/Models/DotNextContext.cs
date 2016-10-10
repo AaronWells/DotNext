@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
-using System.Linq;
+using Microsoft.Extensions.Options;
 
 namespace Api.Models
 {
@@ -10,23 +9,21 @@ namespace Api.Models
     {
         private IHostingEnvironment _environment;
         private IHttpContextAccessor _httpContextAccessor;
+        private readonly IOptions<ApiOptions> _optionsAccessor;
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-        //    optionsBuilder.UseSqlServer(@"Data Source=(local);Initial Catalog=DotNext;Integrated Security=True");
-        //}
-
-        public DotNextContext(IHostingEnvironment environnment, IHttpContextAccessor httpContextAccessor) : base()
+        public DotNextContext(IHostingEnvironment environnment,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<ApiOptions> optionsAccessor)
         {
             _environment = environnment;
             _httpContextAccessor = httpContextAccessor;
+            _optionsAccessor = optionsAccessor;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(new SecureDbConnection());
+            optionsBuilder.UseSqlServer(new SecureDbConnection(_optionsAccessor.Value.ConnectionString));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

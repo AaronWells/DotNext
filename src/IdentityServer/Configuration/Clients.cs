@@ -36,6 +36,21 @@ namespace Host.Configuration
                         StandardScopes.Profile.Name,
                         "api1"
                     }
+                },
+                new Client
+                {
+                    ClientId = "myapi",
+                    ClientSecrets = new List<Secret>
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    ClientName = "My Beautiful Api",
+                    AllowedScopes =
+                    {
+                        StandardScopes.OpenId.Name,
+                        "read"
+                    },
+                    Enabled = true
                 }
             };
         }

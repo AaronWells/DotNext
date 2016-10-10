@@ -4,14 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("[controller]")]
-    [Authorize]
+    [Authorize, Route("api/[controller]")]
     public class ClaimsController : ControllerBase
     {
         public IActionResult Get()
         {
-            var claims = User.Claims.Select(c => new { c.Type, c.Value });
-            return new JsonResult(claims);
+            return new JsonResult(User.Claims.Select(c => new { c.Type, c.Value }));
         }
     }
 }

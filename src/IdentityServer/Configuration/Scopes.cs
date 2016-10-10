@@ -11,7 +11,7 @@ namespace Host.Configuration
             {
                 StandardScopes.OpenId,
                 StandardScopes.Profile,
-
+                StandardScopes.OfflineAccess,
                 new Scope
                 {
                     Name = "api1",
