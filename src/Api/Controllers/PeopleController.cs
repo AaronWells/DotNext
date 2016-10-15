@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
-    [Authorize, Route("api/[controller]")]
+    [Authorize]
+    [Route("api/[controller]")]
     public class PeopleController
     {
         private readonly DotNextContext _context;

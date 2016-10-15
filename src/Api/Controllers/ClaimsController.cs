@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Authorize, Route("api/[controller]")]
+    [Authorize]
+    [Route("api/[controller]")]
     public class ClaimsController : ControllerBase
     {
         public IActionResult Get()

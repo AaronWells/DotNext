@@ -1,69 +1,58 @@
-﻿using Host.Configuration;
+﻿using System.Collections.Generic;
+using IdentityServer4.Models;
+using IdentityServer4.Services.InMemory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
 
-namespace Host
+namespace IdentityServer
 {
     public class Startup
     {
-        private readonly IHostingEnvironment _environment;
+        private IList<Scope> scopes = new List<Scope> {
+            new Scope { Name="api1", Description="Api Application Claim" }
+        };
 
-        public Startup(IHostingEnvironment env)
+        private List<InMemoryUser> users = new List<InMemoryUser> { };
+
+        private List<Client> clients = new List<Client> {
+            new Client
         {
-            _environment = env;
-        }
+            ClientId = "client",
 
+            // no interactive user, use the clientid/secret for authentication
+            AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+            // secret for authentication
+            ClientSecrets =
+            {
+                new Secret("secret".Sha256())
+            },
+
+            // scopes that client has access to
+            AllowedScopes = { "api1" }
+        }
+        };
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            var cert = new X509Certificate2(Path.Combine(_environment.ContentRootPath, "idsrv3test.pfx"), "idsrv3test");
-
-            var builder = services.AddIdentityServer(options => options.RequireSsl = false)
-                .SetSigningCredential(cert)
-                .AddInMemoryClients(Clients.Get())
-                .AddInMemoryScopes(Scopes.Get())
-                .AddInMemoryUsers(Users.Get());
-
-            // for the UI
-            services
-                .AddMvc()
-                .AddRazorOptions(razor =>
-                {
-                    razor.ViewLocationExpanders.Add(new UI.CustomViewLocationExpander());
-                });
-            services.AddTransient<UI.Login.LoginService>();
+            services.AddDeveloperIdentityServer()
+                //.AddInMemoryUsers(users)
+                .AddInMemoryClients(clients)
+                .AddInMemoryScopes(scopes)
+                //.AddInMemoryStores()
+                ;
         }
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(LogLevel.Trace);
-            loggerFactory.AddDebug(LogLevel.Trace);
-
+            loggerFactory.AddConsole(LogLevel.Debug);
             app.UseDeveloperExceptionPage();
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationScheme = "Temp",
-                AutomaticAuthenticate = false,
-                AutomaticChallenge = false
-            });
-
-            app.UseGoogleAuthentication(new GoogleOptions
-            {
-                AuthenticationScheme = "Google",
-                SignInScheme = "Temp",
-                ClientId = "434483408261-55tc8n0cs4ff1fe21ea8df2o443v2iuc.apps.googleusercontent.com",
-                ClientSecret = "3gcoTrEDPPJ0ukn_aYYT6PWo"
-            });
-
             app.UseIdentityServer();
-
-            app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
         }
     }
 }
