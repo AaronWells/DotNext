@@ -7,10 +7,12 @@ namespace Api.Models
     public class SecureDbConnection : DbConnection
     {
         private readonly SqlConnection _sqlConnection;
+        private string _userContext;
 
-        public SecureDbConnection(string connectionString)
+        public SecureDbConnection(string connectionString, string userContext)
         {
             _sqlConnection = new SqlConnection(connectionString);
+            _userContext = userContext;
         }
         
         protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
@@ -27,7 +29,7 @@ namespace Api.Models
         {
             _sqlConnection.Open();
             var cmd = _sqlConnection.CreateCommand();
-            cmd.CommandText = $@"EXEC sp_set_session_context @key=N'UserId', @value='AliceSmith@email.com';";
+            cmd.CommandText = $@"EXEC sp_set_session_context @key=N'UserId', @value='{_userContext}';";
             cmd.ExecuteNonQuery();
         }
 

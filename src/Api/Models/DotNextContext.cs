@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Linq;
 
 namespace Api.Models
 {
@@ -23,7 +24,8 @@ namespace Api.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(new SecureDbConnection(_optionsAccessor.Value.ConnectionString));
+            var educationContext = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "client_educationContext")?.Value ?? "";
+            optionsBuilder.UseSqlServer(new SecureDbConnection(_optionsAccessor.Value.ConnectionString, educationContext));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
