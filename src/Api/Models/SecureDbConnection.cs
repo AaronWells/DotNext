@@ -7,7 +7,7 @@ namespace Api.Models
     public class SecureDbConnection : DbConnection
     {
         private readonly SqlConnection _sqlConnection;
-        private string _userContext;
+        private readonly string _userContext;
 
         public SecureDbConnection(string connectionString, string userContext)
         {

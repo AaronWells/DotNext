@@ -2,7 +2,7 @@
 
 namespace Api.Models
 {
-    public partial class Schools
+    public class Schools
     {
         public long Id { get; set; }
         public Guid Uid { get; set; }

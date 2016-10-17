@@ -1,22 +1,18 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Linq;
 
 namespace Api.Models
 {
-    public partial class DotNextContext : DbContext
+    public class DotNextContext : DbContext
     {
-        private IHostingEnvironment _environment;
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IOptions<ApiOptions> _optionsAccessor;
 
-        public DotNextContext(IHostingEnvironment environnment,
-            IHttpContextAccessor httpContextAccessor,
+        public DotNextContext(IHttpContextAccessor httpContextAccessor,
             IOptions<ApiOptions> optionsAccessor)
         {
-            _environment = environnment;
             _httpContextAccessor = httpContextAccessor;
             _optionsAccessor = optionsAccessor;
         }

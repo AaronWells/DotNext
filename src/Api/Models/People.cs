@@ -2,7 +2,7 @@
 
 namespace Api.Models
 {
-    public partial class People
+    public class People
     {
         public long Id { get; set; }
         public Guid Uid { get; set; }

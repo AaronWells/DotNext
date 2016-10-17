@@ -10,11 +10,11 @@ namespace Client
     {
         public static void Main(string[] args)
         {
-            TokenResponse tokenResponse;
             do
             {
                 var key = Console.ReadKey().KeyChar;
                 Console.WriteLine(key);
+                TokenResponse tokenResponse;
                 switch (key)
                 {
                     case '0':

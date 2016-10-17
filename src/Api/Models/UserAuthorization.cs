@@ -1,6 +1,6 @@
 ﻿namespace Api.Models
 {
-    public partial class UserAuthorization
+    public class UserAuthorization
     {
         public long UserId { get; set; }
         public long AuthorizationId { get; set; }
