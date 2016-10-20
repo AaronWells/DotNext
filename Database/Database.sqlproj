@@ -82,6 +82,8 @@
     <Build Include="Security\Functions\fn_securityPredicate.sql" />
     <Build Include="Security\Security.sql" />
     <Build Include="Security\AuthorizationHierarchy.sql" />
+    <Build Include="MaskedUser.sql" />
+    <Build Include="UnmaskedUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\SampleData.sql" />

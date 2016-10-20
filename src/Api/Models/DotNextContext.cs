@@ -21,7 +21,8 @@ namespace Api.Models
         {
             base.OnConfiguring(optionsBuilder);
             var educationContext = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "client_educationContext")?.Value ?? "";
-            optionsBuilder.UseSqlServer(new SecureDbConnection(_optionsAccessor.Value.ConnectionString, educationContext));
+            var dbUser = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "client_dbuser")?.Value ?? "";
+            optionsBuilder.UseSqlServer(new SecureDbConnection(_optionsAccessor.Value.ConnectionString, educationContext, dbUser));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

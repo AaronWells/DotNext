@@ -8,13 +8,15 @@ namespace Api.Models
     {
         private readonly SqlConnection _sqlConnection;
         private readonly string _userContext;
+        private readonly string _dbUser;
 
-        public SecureDbConnection(string connectionString, string userContext)
+        public SecureDbConnection(string connectionString, string userContext, string dbUser)
         {
             _sqlConnection = new SqlConnection(connectionString);
             _userContext = userContext;
+            _dbUser = dbUser;
         }
-        
+
         protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
         {
             return _sqlConnection.BeginTransaction(isolationLevel);
@@ -22,6 +24,9 @@ namespace Api.Models
 
         public override void Close()
         {
+            var cmd = _sqlConnection.CreateCommand();
+            cmd.CommandText = $@"REVERT;";
+            cmd.ExecuteNonQuery();
             _sqlConnection.Close();
         }
 
@@ -29,7 +34,8 @@ namespace Api.Models
         {
             _sqlConnection.Open();
             var cmd = _sqlConnection.CreateCommand();
-            cmd.CommandText = $@"EXEC sp_set_session_context @key=N'UserId', @value='{_userContext}';";
+            cmd.CommandText =   $@"EXEC sp_set_session_context @key=N'UserId', @value='{_userContext}';" +
+                                $@"EXECUTE AS USER = '{_dbUser}';";
             cmd.ExecuteNonQuery();
         }
 
