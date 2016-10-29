@@ -11,13 +11,10 @@ namespace Api2
             get { return Context.CurrentUser; }
         }
 
-        public ApiModule(PeopleRepository repository)
+        public ApiModule(PeopleRepository repository): base("/api")
         {
-            this.RequiresAuthentication();
-
-            Get("/", args => "Hello World, it's Nancy on .NET Core");
-            Get("/claims", args => Principal.Claims);
-            Get("/api/{resource}", args =>
+            this.RequiresAuthentication();    
+            Get("/{resource}", args =>
             {
                 return repository.GetAll(args.resource);
             });
