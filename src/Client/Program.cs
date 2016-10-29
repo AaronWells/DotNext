@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Client
@@ -57,8 +58,16 @@ namespace Client
         {
             var client = new HttpClient();
             client.SetBearerToken(tokenResponse.AccessToken);
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri("http://localhost:5001/api/people"),
+                Method = HttpMethod.Get,
+            };
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = client.GetAsync("http://localhost:5001/api/people").Result;
+            var response = client.SendAsync(request).Result;
+
+            //var response = client.GetAsync("http://localhost:5001/api/people").Result;
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine(response.StatusCode);

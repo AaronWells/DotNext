@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Api.Models
+namespace Models
 {
     public class Districts
     {
