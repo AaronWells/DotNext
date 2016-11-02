@@ -30,7 +30,6 @@ namespace Api2
             {
                 Authority = "http://localhost:5000",
                 ScopeName = "api1",
-
                 RequireHttpsMetadata = false
             });
 

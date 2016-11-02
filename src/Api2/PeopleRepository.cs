@@ -8,30 +8,24 @@ namespace Api2
 {
     public class PeopleRepository
     {
-        private string connectionString;
-        private ICurrentRequest request;
+        private readonly string _connectionString;
+        private readonly ICurrentRequest _request;
 
         public PeopleRepository(ICurrentRequest request)
         {
-            this.request = request; 
-            connectionString = @"Data Source=(local);Initial Catalog=DotNext;Integrated Security=True";
+            _request = request; 
+            _connectionString = @"Data Source=(local);Initial Catalog=DotNext;Integrated Security=True";
         }
 
-        public IDbConnection Connection
-        {
-            get
-            {
-                return new SqlConnection(connectionString);
-            }
-        }
+        public IDbConnection Connection => new SqlConnection(_connectionString);
 
         private void BeforeCall(IDbConnection dbConnection)
         {
-            var educationContext = request.context.CurrentUser.Claims.FirstOrDefault(c => c.Type == "client_educationContext")?.Value ?? "";
-            var dbUser = request.context.CurrentUser.Claims.FirstOrDefault(c => c.Type == "client_dbuser")?.Value ?? "";
+            var educationContext = _request.Context.CurrentUser.Claims.FirstOrDefault(c => c.Type == "client_educationContext")?.Value ?? "";
+            var dbUser = _request.Context.CurrentUser.Claims.FirstOrDefault(c => c.Type == "client_dbuser")?.Value ?? "";
             var cmd = dbConnection.CreateCommand();
             cmd.CommandText = $@"EXEC sp_set_session_context @key=N'UserId', @value='{educationContext}';" +
-                                $@"EXECUTE AS USER = '{dbUser}';";
+                              $@"EXECUTE AS USER = '{dbUser}';";
             cmd.ExecuteNonQuery();
         }
 
@@ -44,7 +38,7 @@ namespace Api2
 
         public IEnumerable<dynamic> GetAll(string resource)
         {
-            using (IDbConnection dbConnection = Connection)
+            using (var dbConnection = Connection)
             {
                 dbConnection.Open();
                 BeforeCall(dbConnection);

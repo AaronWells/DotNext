@@ -1,8 +1,4 @@
 ﻿using Nancy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Nancy.TinyIoc;
 
 namespace Api2
@@ -18,16 +14,16 @@ namespace Api2
 
     public interface ICurrentRequest
     {
-        NancyContext context { get; }
+        NancyContext Context { get; }
     }
 
     internal class CurrentRequest: ICurrentRequest
     {
-        public NancyContext context { get; }
+        public NancyContext Context { get; }
 
         public CurrentRequest(NancyContext context)
         {
-            this.context = context;
+            Context = context;
         }
     }
 }
