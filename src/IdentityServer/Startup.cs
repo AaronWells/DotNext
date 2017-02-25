@@ -10,8 +10,9 @@ namespace IdentityServer
 {
     public class Startup
     {
-        private readonly IList<Scope> _scopes = new List<Scope> {
-            new Scope { Name="api1", Description="Api Application Claim", Type = ScopeType.Resource }
+        private readonly IList<ApiResource> _apiResources = new List<ApiResource>
+        {
+            new ApiResource("api1", "Api Application Claim")
         };
 
         private readonly List<Client> _clients = new List<Client> {
@@ -48,9 +49,11 @@ namespace IdentityServer
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDeveloperIdentityServer()
-                .AddInMemoryClients(_clients)
-                .AddInMemoryScopes(_scopes);
+            services.AddIdentityServer()
+            .AddTemporarySigningCredential()
+            .AddInMemoryApiResources(_apiResources)
+            .AddInMemoryClients(_clients);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

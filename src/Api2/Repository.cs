@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace Api2
 {
-    public class PeopleRepository
+    public class Repository
     {
         private readonly string _connectionString;
         private readonly ICurrentRequest _request;
 
-        public PeopleRepository(ICurrentRequest request)
+        public Repository(ICurrentRequest request)
         {
             _request = request; 
             _connectionString = @"Data Source=(local);Initial Catalog=DotNext;Integrated Security=True";

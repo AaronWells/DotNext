@@ -37,7 +37,7 @@ namespace Client
                 {
                     Console.WriteLine(tokenResponse.Error);
                 }
-                //Console.WriteLine(tokenResponse.Json);
+                Console.WriteLine(tokenResponse.Json);
                 //GetClaimsData(tokenResponse);
                 GetPeopleData(tokenResponse);
             } while (true);

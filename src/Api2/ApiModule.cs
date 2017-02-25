@@ -5,7 +5,7 @@ namespace Api2
 {
     public sealed class ApiModule : NancyModule
     {
-        public ApiModule(PeopleRepository repository): base("/api")
+        public ApiModule(Repository repository): base("/api")
         {
             this.RequiresAuthentication();    
             Get("/{resource}", args => repository.GetAll(args.resource));
